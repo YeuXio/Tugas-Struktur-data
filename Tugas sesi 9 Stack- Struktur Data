@@ -1,0 +1,76 @@
+#include <iostream>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+stack<string> textStack;
+stack<string> redoStack;
+
+void push(const string& teks) {
+    textStack.push(teks);// Mengabaikan karakter newline sebelumnya
+}
+
+void undo() {
+    if (!textStack.empty()) {
+        redoStack.push(textStack.top());
+        textStack.pop();
+    } else {
+        cout << "Tidak ada yang bisa diundo." << endl;//Untuk membatalkan teks yang telah dimasukkan sebelumnya, gunakan operasi "undo"
+    }
+}
+
+void redo() {
+    if (!redoStack.empty()) {
+        textStack.push(redoStack.top());
+        redoStack.pop();
+    } else {
+        cout << "Tidak ada yang bisa diredo." << endl;//Untuk mengulangi teks yang telah dibatalkan sebelumnya (jika ada), gunakan operasi "redo"
+    }
+}
+
+bool kosongUndo() {
+    return textStack.empty();
+}//Untuk memeriksa apakah tumpukan undo kosong, gunakan operasi "kosongUndo"
+
+bool kosongRedo() {
+    return redoStack.empty();
+}//Untuk memeriksa apakah tumpukan undo kosong, gunakan operasi "kosongUndo
+
+int main() {
+    string operasi;
+    string teks;
+
+    cout << "Selamat datang di Editor Teks Sederhana!" << endl;
+    cout << "Ketik      : (Untuk Memasukan Teks)" << endl;
+    cout << "Undo       : (Untuk Meng-undo Teks)" << endl;
+    cout << "Redo       : (Untuk Meng-Redo Teks)" << endl;
+    cout << "EmpetyUndo : (Untuk Mengosongkan Undo)" << endl;
+    cout << "EmpetyRedo : (Untuk Mengosongkan Redo)" << endl;
+    cout << "Operasi yang tersedia (Pilih Operasi) : ketik, undo, redo, EmpetyUndo, EmpetyRedo" << endl;
+
+    while (true) {
+        cout << "Masukkan operasi: ";
+        cin >> operasi;
+    
+        if (operasi == "ketik") {
+            cout << "Masukkan teks: "; //Untuk menambahkan teks, gunakan operasi "ketik"
+            cin.ignore(); 
+            getline(cin, teks);
+            push(teks);
+            cout << "Teks dimasukkan: " << teks << endl;
+        } else if (operasi == "undo") {
+            undo(); 
+        } else if (operasi == "redo") {
+            redo(); 
+        } else if (operasi == "EmpetyUndo") {
+            cout << (kosongUndo() ? "Tumpukan Undo kosong." : "Tumpukan Undo tidak kosong.") << endl; 
+        } else if (operasi == "EmpetyRedo") {
+            cout << (kosongRedo() ? "Tumpukan Redo kosong." : "Tumpukan Redo tidak kosong.") << endl; //Untuk memeriksa apakah tumpukan redo kosong, gunakan operasi "kosongRedo"
+        } else {
+            cout << "Operasi tidak valid." << endl; //Salah Memasukan Operasi
+        }
+    }
+
+    return 0;
+}
